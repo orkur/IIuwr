@@ -55,10 +55,6 @@ def wypisz(H, V, tab):
 if __name__ == '__main__':
     H = (1, 1, 1)
     V = (1, 1, 1)
-    # program dziala, ale mam problem z wypisywaniem rekurencyjnym
-    # EDIT, okazalo sie ze nie wykorzystalem deepcopying przez co sie psulo,
-    #  dodatkowo nie wiedzialem ze "rekursja()" przyjmuje pole "rozw" przez referencje, a nie kopie
-    # prosilbym na nastepnych zajeciach wytlumaczyc kiedy co jest kopiowane, a kiedy brane przez referencje
     for i in shadow(H, V):
         wypisz(H,V,i)
     
