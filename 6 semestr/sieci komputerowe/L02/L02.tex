@@ -1,0 +1,55 @@
+\documentclass{article}[A4]
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+\titleformat{\section}  % which section command to format
+  {\fontsize{10}{12}\bfseries} % format for whole line
+  {\thesection} % how to show number
+  {1em} % space between number and text
+  {} % formatting for just the text
+  [] % formatting for after the text
+\title{Sieci Komputerowe}
+\author{Jakub Gałaszewski} 
+\begin{document}
+\maketitle
+\begin{enumerate}
+	\item{W kablu koncentrycznym używanym w standardowym 10-Mbitowym Ethernecie sygnał rozchodzi się z prędkością $10^8 $m/s. Standard ustala, że maksymalna odległość między dwoma komputerami może wynosić co najwyżej 2,5 km. Oblicz, jaka jest minimalna długość ramki (wraz z nagłówkami).}\\\\
+$$10Mb = 10^7 b$$
+$$v = 10^8 \frac{m}{s}$$
+$$s = 2500 m$$
+musimy obliczyć czas propagacji:
+$$t = \frac{s}{v}= \frac{2500}{10^8} = 25 * 10^{-6}$$
+wiemy że minimalna długość ramki w czasie to dwukrotność czasu propagacji (wysyłamy informację i czekamy aż wróci):
+$$t_{ramki} = 5 * 10^{-5}$$
+i teraz korzystamy z naszego $10Mb$:
+$$10^7 \frac{b}{s} * 5 * 10^{-5} s = 500b$$
+\item{Rozważmy rundowy protokół Aloha we współdzielonym kanale, tj. w każdej rundzie każdy z n uczestników usiłuje wysłać ramkę z prawdopodobieństwem p. Jakie jest prawdopodobieństwo P(p, n), że jednej stacji uda się nadać (tj. że nie wystąpi kolizja)? Pokaż, że P(p, n) jest maksymalizowane dla p = 1/n. Ile wynosi $\lim_{n \rightarrow \inf} P(1/n, n)$?}\\\\
+Zadanie ma błąd, chcemy mieć dokładnie jedną kolizję, nie conajmniej 1!\\
+czyli $P(p, b) = np(1-p)^{n-1}$, nadal skracamy i wychodzi nam że dojdziemy do $\frac{1}{n}$. Skoro tak to $\lim_{n \rightarrow \inf}P(1/n, n) =\lim_{n \rightarrow \inf} \frac{1}{n}n(1-\frac{1}{n})^{n-1} =e^{-1}$
+w tym protokole każdy ma równą szansę aby wysłał swoją ramkę, czyli p. Skoro tak, to znaczy że mamy 1-p szansy na brak kolizji dla jednej ramki. dla n ramek mamy już $(1-p)^n$ szansy, czyli przeciwne prawdopodobieństwo (tj takie gdzie występuje conajmniej jedna kolizja) wynosi $1-(1-p)^n$. Chcemy obliczyć z niej pochodną i przyrównać do 0.
+$$\frac{d}{dp}(1-(1-p)^n) = n(1-p)^{n-1} = 0$$
+widzimy że im mniejszy p, tym mamy lepszy wynik, tak więc wynik maksymalny to $\frac{1}{n}$
+$$\lim_{n \rightarrow \inf} P(1/n, n) = 1 - (1-\frac{1}{n})^n = 1 - e^{-1}$$
+	\item{Wyszukaj w sieci informację na temat zjawiska Ethernet capture i wytłumacz w jaki sposób ono powstaje. (Tym mianem określa się sytuację, w której jedna ze stacji nadaje znacznie częściej, choć wszystkie stacje używają algorytmu CSMA/CD.)}\\\\
+	For example, user A and user B both try to access a quiet link at the same time. Since they detect a collision, user A waits for a random time between 0 and 1 time units and so does user B. Let's say user A chooses a lower back-off time. User A then begins to use the link and B allows it to finish sending its frame. If user A still has more to send, then user A and user B will cause another data collision. A will once again choose a random back-off time between 0 and 1, but user B will choose a back-off time between 0 and 3 – because this is B's second time colliding in a row. Chances are A will "win" this one again. If this continues, A will most likely win all the collision battles, and after 16 collisions (the number of tries before a user backs down for an extended period of time), user A will have "captured" the channel.\\
+	na język polski to sytuacja gdzie jeden z userów ma ciągły dostęp do medium, a drugie coraz bardziej się opóźnija, przez kolejne nieudane próby podłączenia.
+	\item{Jaka suma kontrolna CRC zostanie dołączona do wiadomości 1010 przy założeniu że CRC używa wielomianu $x^2 + x + 1$? A jaka jeśli używa wielomianu $x^7 + 1$?}\\\\
+	nasz proces wygląda następująco: doklejamy tyle zer ile najwyższa potęga, a następnie dzielę.\\
+	Dla pierwszego wielomianu do $1010$ doklejam 2 zera, mamy $101000$. Teraz dzielimy wielomianowo $x^5 + x^3 / x^2 + x + 1 = x^3 - x^2 + x r. -x$. i ta reszta to nasz wynik, czyli $10$\\
+	Dla pierwszego wielomianu do $1010$ doklejam 7 zer, mamy $10100000000$. Teraz dzielimy wielomianowo $x^7 + 1 = x^3 + x r. x^3 + x$. i ta reszta to nasz wynik, czyli $1010$\\
+	\item{Pokaż, że CRC-1, czyli 1-bitowa suma obliczana na podstawie wielomianu G (x) = x + 1, działa identycznie jak bit parzystości.}\\\\
+	D-d:\\
+	zaczniemy od lematu że $x^n + x^k$ dzieli $x+1$.
+	$$x^n + c^k = x^k(x^{n-k} + 1), n \geq k$$
+	pokażemy, że $x^{n-k}+1$ jest podzielne.\\
+	$$x^{n-k}+1 = x^m + 1^m = x^m - 1^m = (x-1)Q(x)$$.
+	czyli całość jest podzielna przez x-1, a to znaczy, że dla naszej dziedziny również dzieli przez x+1.\\
+	Weźmy nasz wielomian wejściowy, potrafimy go zapisać w następujący sposób:
+	$$W(x)=x^{k_1} + x^{k_2} + x^{k_3}+...+x^{k_n}$$
+	w zależności od naszej liczby n, dla parzystego n  potrafimy lematem "złączyć w pary" nasze x, dla niepatrzystanego zostanie jeden niepołączony, czyli z resztą 1.
+\end{enumerate}
+
+ \end{document}
