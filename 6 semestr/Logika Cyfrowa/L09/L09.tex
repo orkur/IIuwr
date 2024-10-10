@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{circuitikz}
+\usepackage{trace}
+%\usepackage{minted}
+\titleformat{\section}  % which section command to format
+  {\fontsize{10}{12}\bfseries} % format for whole line
+  {\thesection} % how to show number
+  {1em} % space between number and text
+  {} % formatting for just the text
+  [] % formatting for after the text
+  \title{Logika Cyfrowa}
+\author{Jakub Gałaszewski} 
+\begin{document}
+\maketitle
+\section{Narysuj schemat obwodu implementującego deterministyczny automat skończony (lub automat Moore’a z jednobitowym wyjściem) opisany poniższą tabelą stanów, ze stanem akceptującym 11:}
+\begin{center}
+	\begin{tabular}{|c|c||c|} 
+	 \hline
+	$q$ & $a$ & $q_0$ \\ 
+	 \hline \hline
+	 00&0& 10\\ \hline
+	 01&0& 01\\ \hline
+	 10&0& 11\\ \hline
+	 11&0& 10\\ \hline
+	 00&1& 11\\ \hline
+	 01&1& 00\\ \hline
+	 10&1& 00\\ \hline
+	 11&1& 01\\ \hline
+	\end{tabular}
+\end{center}
+
+\begin{center}
+	$q_{O0}$\\
+	\begin{tabular}{|c|c|c|c|c|} 
+	 \hline
+	$a\backslash q_1q_0$ &$00$ & $01$ & $11$ & $10$ \\ 
+	 \hline \hline
+	 0&0&1&0&1\\ \hline
+	 1&1&0&1&0\\ \hline
+	\end{tabular}\\
+	$q_{O0}=q_1 \oplus q_0 \oplus a$\\
+\end{center}
+\begin{center}
+	$q_{O1}$\\
+	\begin{tabular}{|c|c|c|c|c|} 
+	 \hline
+	$a\backslash q_1q_0$ &$00$ & $01$ & $11$ & $10$ \\ 
+	 \hline \hline
+	 0&0&1&0&1\\ \hline
+	 1&1&0&1&0\\ \hline
+	\end{tabular}\\
+	$q_{O1}=\bar{q_1}\bar{q_0} + \bar{a}q_1$\\
+\end{center}
+TODO RYSUNEK
+\section{Zdefiniuj deterministyczny automat skończony (np. używając tabeli stanów lub diagramu stanów) rozpoznający ciągi bitów kończące się sekwencją 1001 lub 1111 (czyli język (0 + 1)*(1001 + 1111)). Przykładowo, automat powinien rozpoznać ciąg 010111100110011111 oraz jego prefiksy: 01011110011001111, 01011110011001, 0101111001, 0101111.}
+\begin{center}
+	\includegraphics[scale=0.6]{"L09Z02.png"}
+\end{center}
+\section{Zaprojektuj obwód, którego wyjście o jest w stanie wysokim wtedy i tylko wtedy, gdy przez cztery kolejne cykle zegara dwa bity wejściowe w1 i w2 są równe.}
+\begin{center}
+	\includegraphics[scale=0.09]{"L09Z03.jpg"}
+	\includegraphics[scale=0.15]{"L09Z03II.jpg"}
+\end{center}
+\section{Zdefiniuj automat Mealy’ego rozpoznający ciągi bitów, które wśród trzech ostatnich bitów mają nieparzystą liczbę jedynek (czyli język 1 + 01 + 10 + (0 + 1)*(001 + 010 + 100 + 111)).}
+$Q =  \mathbb{B}^3$,
+$\Sigma =  \{0,1\}$,
+$\Omega =  \{0,1\}$,
+$\delta =  f(x_2,x_1,x_0, a) = x_1x_0a$,
+$\chi =  f(x_2,x_1,x_0,a) = \oplus x_1 \oplus x_0 \oplus a$
+\section{Zdefiniuj automat Moore’a rozpoznający, czy liczba jedynek na wejściu jest podzielna przez 4 lub o 1 większa od liczby podzielnej przez 4.}
+$Q =  \{0, 1, 2, 3 \}$,
+$\Sigma =  \{0,1\}$,
+$\Omega =  \{0,1\}$,
+$\delta =  f(x, a) = begin(cases)
+x jeśli a = 0\\
+(x+1)mod 4 w p.p.$,
+$\chi =  f(x) =  begin(cases)
+1 jeśli x mod 4 = 1 lub x mod 4 = 0\\
+0 w p.p.$
+\end{document}
