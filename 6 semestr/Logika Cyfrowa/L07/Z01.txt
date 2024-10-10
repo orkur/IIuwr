@@ -1,0 +1,54 @@
+// D latch (gate model)
+module d_latch(
+  input d, e,
+  output q, nq
+);
+
+  logic s, r, nd;
+
+  nor g1(q, r, nq);
+  nor g2(nq, s, q);
+  and g3(r, e, nd);
+  and g4(s, e, d);
+  not g5(nd, d);
+
+endmodule
+
+// master-slave D flip-flop
+module dff(
+  input clk, d,
+  output o, no
+);
+
+  logic q, nq1, nq2, nclk;
+
+  d_latch dl1(d, clk, q, nq1);
+  d_latch dl2(q, nclk, o, no);
+  not g(nclk, clk);
+
+endmodule
+module T(
+  input t, clk, act,
+  output q, nq);
+  logic nt, a1, a2, o;
+  not nott(nt, t);
+  and and1(a1, q, nt);
+  and and2(a2, nq, t);
+  or or1(o, a2, a1, act);
+  dff d(clk, o, q, nq);
+endmodule
+
+module licznik(
+  input en, clk, act,
+  output [2:0]q);
+	logic a1, a2, nq0, nq1, nq2;
+  T t1(en, clk, act, q[0], nq0);
+  and and1(a1, en, q[0]);
+  T t2(a1, clk, act, q[1], nq1);
+  and and2(a2, a1, q[1]);
+  T t3(a2, clk, act, q[2], nq2);
+
+
+endmodule
+
+
